@@ -6,11 +6,12 @@ import random
 # special characters = 33, 35, 36, 37, 38, 42, 60, 62, 63, 64, 94, 95
 
 def main():
-    password_length = 10
+    password_length = 200
     password = ""
 
     userinput = ""
     while (userinput != "5"):
+        password = ""
         print("MENU OPTIONS:\n",
               "1 - Lowercase\n",
               "2 - Lowercase + Uppercase\n",
@@ -22,7 +23,6 @@ def main():
         if (userinput == '1'):
             upper_bound = 122
             lower_bound = 97
-            password = ""
 
             for i in range(password_length):
                 rand_char = random.randint(lower_bound, upper_bound)
@@ -31,7 +31,6 @@ def main():
         elif (userinput == '2'):
             upper_bound = 122
             lower_bound = 65
-            password = ""
 
             for i in range(password_length):
                 rand_char = random.randint(lower_bound, upper_bound)
@@ -42,7 +41,6 @@ def main():
         elif (userinput == '3'):
             upper_bound = 122
             lower_bound = 48
-            password = ""
 
             for i in range(password_length):
                 rand_char = random.randint(lower_bound, upper_bound)
@@ -54,8 +52,6 @@ def main():
             excluded = [34, 39, 44, 46, 47, 58, 59, 92, 96]
             upper_bound = 122
             lower_bound = 33
-            password = ""
-            password_length = 10
 
             for i in range(password_length):
                 rand_char = random.randint(lower_bound, upper_bound)
