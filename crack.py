@@ -10,12 +10,13 @@ def crack_password(valid_chars: str):
             return password
     return None
 
-def password_gen(valid_chars: str, min: int, max: int) => str:
+def password_gen(valid_chars: str, min: int, max: int) -> str:
     password = "".join([valid_chars[0] for _ in range(min)])
     yield password
     for i in range(min, max + 1):
         for j in range(len(password)):
             for k in valid_chars:
-                yield password := f"{password[:j]}{k}{password[j+1:]}"
+                password = f"{password[:j]}{k}{password[j+1:]}"
+                yield password
         if (len(password) < max):
-        password = f"{valid_chars[0]}{password}"
+            password = f"{valid_chars[0]}{password}"
