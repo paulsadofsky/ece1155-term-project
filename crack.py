@@ -1,9 +1,14 @@
-def validate_password(str):
-    return password == str
+from itertools import product
+from typing import Optional
 
-def crack_password(valid_chars: str):
-    min = 1
-    max = 20
+def validate_password(password_guess: str) -> bool:
+    """
+    Replace this with some way of getting the password from the other file
+    """
+    password = "gbcgef"  
+    return password == password_guess
+
+def crack_password(valid_chars: str, min:int = 1, max:int = 20) -> Optional[str]:
     password_iter = password_gen(valid_chars, min, max)
     for password in password_iter:
         if validate_password(password):
@@ -11,12 +16,9 @@ def crack_password(valid_chars: str):
     return None
 
 def password_gen(valid_chars: str, min: int, max: int) -> str:
-    password = "".join([valid_chars[0] for _ in range(min)])
-    yield password
-    for i in range(min, max + 1):
-        for j in range(len(password)):
-            for k in valid_chars:
-                password = f"{password[:j]}{k}{password[j+1:]}"
-                yield password
-        if (len(password) < max):
-            password = f"{valid_chars[0]}{password}"
+    for length in range(min, max+1):
+        for password_guess in product(valid_chars, repeat=length):
+            yield "".join(password_guess)
+
+if __name__ == '__main__':
+    print(f"The password is: {crack_password(valid_chars = "abcdefg")}");
