@@ -14,28 +14,28 @@ def generate_password(chars: str, length):
 
 def crack_password(actual_password: str, valid_chars: str, length: int) -> Optional[str]:
     iterations = 0
-    guess = list()
-    len_char_ind = len(valid_chars)-1
-    final_char = valid_chars[len_char_ind]
+    len_valid = len(valid_chars)
+    guess_indices = []
+    target_indices = []
     for i in range(length):
-        guess.append('a')
+        guess_indices.append(0)
+        target_indices.append(valid_chars.index(actual_password[i]))
 
-    while("".join(guess) != actual_password):
+    while(guess_indices != target_indices):
         iterations += 1
 
-        if guess[0] == final_char:
-            guess[0] = 'a'
-            for i in range(1, length):
-                if (guess[i] == final_char):
-                    guess[i] = 'a'
-                    continue
-                else:
-                    guess[i] = valid_chars[valid_chars.index(guess[i])+1]
-                    break
-        else:
-            guess[0] = valid_chars[valid_chars.index(guess[0])+1]
-        
-    return "".join(guess), iterations
+        index = 0
+        while index < length:
+            guess_indices[index] += 1
+            if guess_indices[index] < len_valid:
+                break
+            guess_indices[index] = 0
+            index += 1
+    
+    return iterations
+
+from typing import Optional
+
 
 def get_valid_chars(case):
     valchar = "abcdefghijklmnopqrstuvwxyz"
@@ -54,7 +54,7 @@ def get_valid_chars(case):
 def run_test(length, case):
     valid = get_valid_chars(case)
     password = generate_password(valid, length)
-    pw, count = crack_password(password, valid, length)
+    count = crack_password(password, valid, length)
 
     return count
 
@@ -104,7 +104,7 @@ def run_sim(min, max, loops):
 
 if __name__ == '__main__':
     min = 1
-    max = 3
-    loops = 10
+    max = 4
+    loops = 1
 
     run_sim(min, max, loops)
