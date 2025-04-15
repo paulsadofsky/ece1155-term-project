@@ -63,7 +63,7 @@ def run_test(length, case):
 
     return count, time
 
-def run_loop(length, case, loops):
+def run_loop(length, case, loops, min_length):
     average_iterations = 0
     average_time = 0
     for i in range(loops):
@@ -73,14 +73,14 @@ def run_loop(length, case, loops):
     average_iterations = int(average_iterations/loops)
     average_time = average_time/loops
 
-    results[case-1][length-1] = average_iterations
-    results_time[case-1][length-1] = average_time
+    results[case-1][length-min_length] = average_iterations
+    results_time[case-1][length-min_length] = average_time
 
     return
 
 def run_case(min_length, max_length, case, loops):
     for i in range(max_length-min_length+1):
-        run_loop(min_length+i, case, loops)
+        run_loop(min_length+i, case, loops, min_length)
     
     return
 
@@ -98,7 +98,7 @@ def run_sim(min, max, loops):
         print("")
         print("------------------------------ CASE", i+1, "------------------------------")
         for j in range(max-min+1):   
-            print("Average iterations for password case", i+1, "at length", j+1,"over", loops, "loops:", results[i][j],"(",results_time[i][j],"seconds )")
+            print("Average iterations for password case", i+1, "at length", j+min,"over", loops, "loops:", results[i][j],"(",results_time[i][j],"seconds )")
 
     print("")
 
@@ -113,8 +113,8 @@ def run_sim(min, max, loops):
 # 4 - Lowercase + Uppercase + Numbers + Special
 
 if __name__ == '__main__':
-    min = 1
-    max = 5
+    min = 2
+    max = 4
     loops = 1
 
     run_sim(min, max, loops)
