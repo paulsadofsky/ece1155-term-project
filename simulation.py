@@ -1,8 +1,9 @@
 from typing import Optional
-import random, threading
+import random, threading, time
 
 rows, cols = 4, 20
 results = [[0 for i in range(cols)] for j in range(rows)]
+results_time = [[0 for i in range(cols)] for j in range(rows)]
 
 def generate_password(chars: str, length):
     password = ''
@@ -21,6 +22,7 @@ def crack_password(actual_password: str, valid_chars: str, length: int) -> Optio
         guess_indices.append(0)
         target_indices.append(valid_chars.index(actual_password[i]))
 
+    start_time = time.time()
     while(guess_indices != target_indices):
         iterations += 1
 
@@ -31,8 +33,11 @@ def crack_password(actual_password: str, valid_chars: str, length: int) -> Optio
                 break
             guess_indices[index] = 0
             index += 1
+
+    end_time = time.time()
+    execution_time = end_time - start_time
     
-    return iterations
+    return iterations, execution_time
 
 from typing import Optional
 
@@ -54,17 +59,22 @@ def get_valid_chars(case):
 def run_test(length, case):
     valid = get_valid_chars(case)
     password = generate_password(valid, length)
-    count = crack_password(password, valid, length)
+    count, time = crack_password(password, valid, length)
 
-    return count
+    return count, time
 
 def run_loop(length, case, loops):
     average_iterations = 0
+    average_time = 0
     for i in range(loops):
-        average_iterations += run_test(length, case)
+        run_count, run_time = run_test(length, case)
+        average_iterations += run_count
+        average_time += run_time
     average_iterations = int(average_iterations/loops)
+    average_time = average_time/loops
 
     results[case-1][length-1] = average_iterations
+    results_time[case-1][length-1] = average_time
 
     return
 
@@ -88,7 +98,7 @@ def run_sim(min, max, loops):
         print("")
         print("------------------------------ CASE", i+1, "------------------------------")
         for j in range(max-min+1):   
-            print("Average iterations for password case", i+1, "at length", j+1,"over", loops, "loops:", results[i][j])
+            print("Average iterations for password case", i+1, "at length", j+1,"over", loops, "loops:", results[i][j],"(",results_time[i][j],"seconds )")
 
     print("")
 
@@ -104,7 +114,7 @@ def run_sim(min, max, loops):
 
 if __name__ == '__main__':
     min = 1
-    max = 4
+    max = 5
     loops = 1
 
     run_sim(min, max, loops)
